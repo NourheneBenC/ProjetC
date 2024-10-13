@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1728854054 source:c:\users\nourhene\desktop\prog c\projetc\main.c
+	"Menu.c"
+
+1728854116 c:\users\nourhene\desktop\prog c\projetc\menu.c
+	<stdio.h>
+	<stdlib.h>
+
+1728854116 source:c:\users\nourhene\desktop\prog c\projetc\menu.c
+	<stdio.h>
+	<stdlib.h>
+
