@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1730490484 source:d:\the_programmer\pendu_c_b\pendu_c_b\main.c
+	<stdio.h>
+	<stdlib.h>
+	"pendu_c_b.h"
+
+1730981829 d:\the_programmer\pendu_c_b\pendu_c_b\pendu_c_b.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1730982056 source:d:\the_programmer\pendu_c_b\pendu_c_b\pendu_c_b.c
+	"pendu_c_b.h"
+

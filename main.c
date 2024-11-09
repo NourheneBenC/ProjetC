@@ -1,56 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "pendu_c_b.h"
 
-int main() {
-    int choix;
-    do {
-        choix = menu();
-
-        switch (choix) {
-            case 1: {
-                printf("Vous avez choisi l'option 1 : Démarrer une nouvelle partie \n");
-                demarrerNouvellePartie();
-                break;
-            }
-            case 2: {
-                printf("Vous avez choisi l'option 2 : Sauvegarder la partie \n");
-                sauvegarderPartie();
-                break;
-            }
-            case 3: {
-                printf("Vous avez choisi l'option 3 : Charger une partie \n");
-                chargerPartie();
-                break;
-            }
-            case 4: {
-                printf("Vous avez choisi l'option 4 : Choisir un dictionnaire linguistique \n");
-                choisirDictionnaire();
-                break;
-            }
-            case 5: {
-                printf("Vous avez choisi l'option 5 : Consulter les statistiques \n");
-                afficherStatistiques();
-                break;
-            }
-            case 6: {
-                printf("Vous avez choisi l'option 6 : Choisir le niveau de difficulté \n");
-                choisirNiveauDifficulte();
-                break;
-            }
-            case 7: {
-                printf("Vous avez choisi l'option 7 : Afficher les règles du jeu \n");
-                afficherReglesJeu();
-                break;
-            }
-            case 0:
-                printf("Sortie du programme.\n");
-                break;
-            default:
-                printf("Option invalide. Veuillez réessayer.\n");
-                break;
-        }
-    } while (choix != 0);
-
-    printf(" ******** \n");
+int main()
+{
+    menu();
+   //int choix = 1;
+   //remplir_fichier_niveaux(choix);
+  //  compte c[10], joueur;
+//	int taille_compte = importer_compte(c);
+//	printf("%d\n",taille_compte);
+	//creer_compte(c,&taille_compte,&joueur);
+	//afficher_compte(c,taille_compte);
+	//authentification_compte(c,taille_compte,&joueur);
+	//exporter_compte(c,taille_compte);
     return 0;
 }

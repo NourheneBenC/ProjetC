@@ -1,0 +1,16 @@
+15
+AGENT representant
+PAIN aliment
+LIT meuble
+CHIER excreter
+CLAMP fixation
+FOLIE delire
+GRUE oiseau
+IDEAL parfait
+JADIS ancien
+LOGIS habitat
+MEURT deces
+NEGRE historique
+TROC echange
+ZEBRE raye
+VERBE action
