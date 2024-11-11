@@ -21,6 +21,8 @@
 	struct compte{
 		char login[20];
 		char password[20];
+		int score;
+		int life ;
 	};
 	typedef struct compte compte;
 
@@ -99,4 +101,5 @@
 
 void remplir_fichier_niveaux(int choix);
 
+void init_compte(compte c) ;
 #endif

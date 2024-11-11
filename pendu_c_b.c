@@ -31,6 +31,7 @@ void menu_jouer_partie(save s[n], int * taille_s, compte joueur){
         printf("Veuillez choisir une option : ");
         scanf(" %c",&choix);
 	}while(choix != '1' && choix != '2' && choix != '3' && choix != '4');
+             //init_compte(joueur);
 
 	switch(choix){
 		case '1':
@@ -570,7 +571,7 @@ int verifier_lettre(current * c, char lettre, int * cmp, char clavier[], int tai
 	return 0;
 }
 
-
+/*
 void jouer_partie(save s[n],int * taille_s,compte joueur, int choix){
     dictionnaire d[t_d];
     current c;
@@ -622,8 +623,110 @@ void jouer_partie(save s[n],int * taille_s,compte joueur, int choix){
 	}
 	}
 	//verifier_lettre(&c,lettre);
+} */
+void jouer_partie(save s[], int *taille_s, compte joueur, int rep) {
+    current c;
+    dictionnaire d[t_d];
+    int taille_d = importer_niveau(d, rep);
+    static int level = 0;
+    int game_over = 0;
+    char clavier[26] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+    int taille_clavier = 26;
+    char lettre;
+    time_t start_time, end_time;
+    joueur.life = 3;
+    joueur.score = 0;
+
+    start_time = clock();
+
+    while (!game_over && joueur.life > 0) {
+        int id = rand() % taille_d;
+        creer_current(&c, d, id);
+
+        c.tentative = 0;  // Reset tentative at the beginning of each round
+
+        while (!game_over && c.tentative < 6) {
+            afficher_partie(c, clavier, taille_clavier, joueur);
+
+            lettre = saisir_lettre();
+            supprimer_de_clavier(clavier, taille_clavier, lettre);
+
+            int found = 0;
+            int i;
+            for (i = 0; i < strlen(c.mot); i++) {
+                if (toupper(c.mot[i]) == toupper(lettre) && c.c_mot[i] == '_') {
+                    c.c_mot[i] = c.mot[i];
+                    joueur.score += 10;
+                    found = 1;
+                }
+            }
+
+            if (!found) {
+                c.tentative++;
+            }
+
+         if (strcmp(c.mot, c.c_mot) == 0) {
+            end_time = clock();
+        joueur.score += (6 - c.tentative) * 5;
+        float temp = end_time - start_time;
+        level++;
+        printf("Bravo! Vous avez trouvé le mot en %.2f secondes, vous passez au niveau %d!\n", temp, level);
+    break;
 }
 
+
+        }
+
+        if (c.tentative == 6) {
+            joueur.life--;
+            printf("Vous avez epuise vos tentatives !\n");
+
+            if (joueur.life == 0) {
+                game_over = 1;
+                printf("Vous n'avez plus de vies restantes.\n");
+                break;
+            } else {
+                printf("Vies restantes: %d\n", joueur.life);
+                printf("Tentatives réinitialisees! Vous restez au niveau %d.\n", level + 1);
+            }
+        }
+    }
+
+    end_time = time(NULL);
+    double time_taken = difftime(end_time, start_time);
+
+    if (game_over) {
+        printf("Dommage, vous avez perdu! Le mot était : %s\n", c.mot);
+        level = 0;  // Reset level if game over
+    } else {
+        printf("Bravo! Vous avez trouvé le mot : %s\n", c.mot);
+    }
+
+    printf("Score: %d points\n", joueur.score);
+    printf("Temps écoulé: %.2f secondes\n", time_taken);
+
+    char restart;
+    printf("Voulez-vous recommencer la partie? (O/N): ");
+    scanf(" %c", &restart);
+
+    if (restart == 'N' || restart == 'n') {
+   menu_principal(joueur);
+    }
+    }
+
+
+
+
+
+void afficher_stat_jeu(compte joueur, current c) {
+    printf("Joueur: %s | Tentatives restantes: %d\n", joueur.login, 6 - c.tentative);
+    printf("Score actuel: %d\n", joueur.score);
+}
+/*
+void init_compte(compte c) {
+
+    c.score = 0;
+} */
 void charger_partie(save s[n], int taille_s,compte joueur){
     int i, j ;
     //current c;
@@ -662,6 +765,9 @@ void charger_partie(save s[n], int taille_s,compte joueur){
 void sauvegarder_partie(save s[n], int * taille, compte joueur, current c){
    strcpy(s[*taille].c.login,joueur.login);
    strcpy(s[*taille].c.password, joueur.password);
+      strcpy(s[*taille].c.score,joueur.score);
+
+
    strcpy(s[*taille].play.c_mot, c.c_mot);
    strcpy(s[*taille].play.indice,c.indice);
    strcpy(s[*taille].play.mot,c.mot);
@@ -675,7 +781,7 @@ void exporter_sauvegarde(save s[n], int taille){
     int i;
     fprintf(f,"%d\n",taille);
     for (i = 0 ; i < taille ; i++){
-        fprintf(f,"%s %s %s %s %s %d\n",s[i].c.login,s[i].c.password,s[i].play.mot,s[i].play.indice,s[i].play.c_mot,s[i].play.tentative);
+        fprintf(f,"%s %s %s %s %s %d\n",s[i].c.login,s[i].c.password,s[i].play.mot,s[i].play.indice,s[i].play.c_mot,s[i].play.tentative,s[i].c.score);
     }
     printf("Partie exportee avec succes !\n");
     fclose(f);
@@ -694,7 +800,7 @@ int importer_sauvegarde(save s[n]){
     int i ;
     fscanf(f,"%d\n",&taille);
     for ( i = 0 ; i < taille ; i++){
-        fscanf(f,"%s %s %s %s %s %d\n",s[i].c.login,s[i].c.password,s[i].play.mot,s[i].play.indice,s[i].play.c_mot,&s[i].play.tentative);
+        fscanf(f,"%s %s %s %s %s %d\n",s[i].c.login,s[i].c.password,s[i].play.mot,s[i].play.indice,s[i].play.c_mot,&s[i].play.tentative,s[i].c.score);
     }
     printf("Sauvegarde des parties importees avec succes !\n");
     fclose(f);
@@ -702,7 +808,7 @@ int importer_sauvegarde(save s[n]){
 }
 void afficher_s_actu(save s[n], int taille){
     printf("-------------------------------------------------------------------------------------\n");
-    printf("Login : %s |Password : %s |Mot : %s |Indice : %s |Mot_actu : %s |Tentative : %d\n",s[taille].c.login,s[taille].c.password,s[taille].play.mot,s[taille].play.indice,s[taille].play.c_mot,s[taille].play.tentative);
+    printf("Login : %s |Password : %s |Mot : %s |Indice : %s |Mot_actu : %s |Tentative : %d |sccore %d \n",s[taille].c.login,s[taille].c.password,s[taille].play.mot,s[taille].play.indice,s[taille].play.c_mot,s[taille].play.tentative,s[taille].c.score);
     printf("-------------------------------------------------------------------------------------\n");
 }
 void afficher_sauvegarde_partie(save s[n], int taille){
@@ -723,11 +829,11 @@ void afficher_statistiques(save s[n], int taille_s, compte joueur){
     }
 
 }
-
+/*
 void afficher_stat_jeu(compte joueur, current c){
     printf("JOUEUR : %s | TENTATIVE_RESTANTE : %d |\n",joueur.login,6 - c.tentative);
     printf("1.Indice\n2.Quitter partie\n");
-}
+} */
 
 
 //-----------------------------FONCTIONS REMPLIR FICHIERS------------------
